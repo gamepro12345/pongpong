@@ -4,6 +4,10 @@ import pyxel
 W = 160
 H = 120
 
+#基本変数の定義
+hp=3
+ball_many=1
+speed=1
 # プレイヤー（パドル）の位置と大きさ
 pad_x = 70
 pad_y = 110
@@ -13,8 +17,8 @@ pad_h = 4
 # ボールの位置と速さ
 ball_x = 80
 ball_y = 60
-vx = 1
-vy = 1
+vx = speed
+vy = speed
 
 def update():
     global pad_x, ball_x, ball_y, vx, vy
