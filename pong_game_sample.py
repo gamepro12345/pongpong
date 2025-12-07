@@ -25,7 +25,7 @@ def update():
         pyxel.text(60, 60, "GAME OVER", 8)
         game_over=True
         time.sleep(1)
-    if pong_time>=2:
+    if pong_time>=4:
         level+=1
         balls.append({"x": 80, "y": 60, "vx": 1, "vy": 1})
         hp+=1
