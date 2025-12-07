@@ -1,13 +1,13 @@
 import pyxel
-
+import time
 # 画面サイズ
 W = 160
 H = 120
-
 #基本変数の定義
-hp=3
-ball_many=1
 speed=1
+hp=3
+pong_time=0
+game_over=False
 # プレイヤー（パドル）の位置と大きさ
 pad_x = 70
 pad_y = 110
@@ -21,8 +21,15 @@ vx = speed
 vy = speed
 
 def update():
-    global pad_x, ball_x, ball_y, vx, vy
-
+    global pad_x, ball_x, ball_y, vx, vy, hp, speed, pong_time, game_over
+    # --- ゲームループの変数管理　---
+    if hp<=0:
+        pyxel.text(60, 60, "GAME OVER", 8)
+        game_over=True
+        time.sleep(2)
+    if pong_time==2:
+        speed+=1
+        pong_time=0
     # --- パドルの操作 ---
     if pyxel.btn(pyxel.KEY_LEFT):
         pad_x -= 2
@@ -43,6 +50,7 @@ def update():
     if ((pad_x <= ball_x and ball_x <= pad_x + pad_w) and
         (pad_y - 3 <= ball_y and ball_y <= pad_y)):
         vy = -vy
+        pong_time+=1
 
     # --- 下に落ちたらリセット ---
     if ball_y > H:
@@ -51,11 +59,17 @@ def update():
         ball_y = 60
         vx = 1
         vy = 1
+        hp-=1
 
 
 def draw():
     pyxel.cls(0)
-
+    #hp
+    pyxel.text(5, 5, "HP:"+str(hp), 7)
+    #ゲームがオーバー
+    if game_over:
+        pyxel.text(60, 60, "GAME OVER", 8)
+        return
     # パドル
     pyxel.rect(pad_x, pad_y, pad_w, pad_h, 7)
 
