@@ -17,16 +17,15 @@ pad_h = 4
 # ボールの位置と速さ
 ball_x = 80
 ball_y = 60
-vx = speed
-vy = speed
+
 
 def update():
-    global pad_x, ball_x, ball_y, vx, vy, hp, speed, pong_time, game_over
+    global pad_x, ball_x, ball_y, hp, speed, pong_time, game_over
     # --- ゲームループの変数管理　---
     if hp<=0:
         pyxel.text(60, 60, "GAME OVER", 8)
         game_over=True
-        time.sleep(2)
+        time.sleep(1)
     if pong_time==2:
         speed+=1
         pong_time=0
@@ -37,14 +36,14 @@ def update():
         pad_x += 2
 
     # --- ボールの移動 ---
-    ball_x += vx
-    ball_y += vy
+    ball_x += speed
+    ball_y += speed
 
     # --- 壁との反射 ---
     if ball_x < 0 or ball_x > W - 3:
-        vx = -vx
+        speed = -speed
     if ball_y < 0:
-        vy = -vy
+        speed = -speed
 
     # --- パドルとの当たり判定 ---    
     if ((pad_x <= ball_x and ball_x <= pad_x + pad_w) and
