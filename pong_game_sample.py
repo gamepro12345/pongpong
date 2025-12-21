@@ -4,11 +4,14 @@ import random
 # 画面サイズ
 W = 160
 H = 120
+global the_world
 #基本変数の定義5
 hp=1
 pong_time=0
 game_over=False
 level=1
+the_world=0
+
 # ボールのリスト（位置と速度を辞書で管理）
 balls = [{"x": random.randint(0, 150), "y": random.randint(0, 10), "vx": 1, "vy": 1}]
 
@@ -25,35 +28,41 @@ def update():
         pyxel.text(60, 60, "GAME OVER", 8)
         game_over=True
         time.sleep(1)
+    # レベルアップ処理
     if pong_time>=4:
-        level+=1
-        balls.append({"x": random.randint(0, 150), "y": random.randint(0, 110), "vx": 1, "vy": 1})
-        hp+=1
-        pong_time=0
-    
+        if  the_world==0:
+            level+=1
+            balls.append({"x": random.randint(0, 150), "y": random.randint(0, 80), "vx": 1, "vy": 1})
+            hp+=1
+            pong_time=0
     # ボールがなくなったら復活
     if len(balls) == 0:
         time.sleep(1)
         balls.append({"x": 80, "y": 60, "vx": 2, "vy": 2})
     # --- パドルの操作 ---
     if pyxel.btn(pyxel.KEY_LEFT):
-        pad_x -= 5
+        pad_x -= 2
     if pyxel.btn(pyxel.KEY_RIGHT):
-        pad_x += 5
+        pad_x += 2
 
     # --- ボールの移動と反射 ---
     for ball in balls[:]:
-        if not pyxel.btn(pyxel.KEY_SPACE):
+        if the_world==0:
             ball["x"] += ball["vx"]
             ball["y"] += ball["vy"]
 
         # 壁との反射
         if ball["x"] < 0 or ball["x"] > W - 3:
             ball["vx"] = -ball["vx"]
-            pong_time
+            pong_time+=1
         if ball["y"] < 0:
             ball["vy"] = -ball["vy"]
             pong_time+=1
+        if pyxel.btn(pyxel.KEY_SPACE) and the_world==0:
+            the_world=9
+        if the_world>0:
+            the_world-=1
+            time.sleep(1)
 
         # パドルとの当たり判定
         if ((pad_x <= ball["x"] and ball["x"] <= pad_x + pad_w) and
@@ -82,8 +91,12 @@ def draw():
 
     # ボール（複数描画）
     for ball in balls:
-        if not pyxel.btn(pyxel.KEY_SPACE):
-            pyxel.rect(ball["x"], ball["y"], 3, 3, 10)
+        pyxel.rect(ball["x"], ball["y"], 3, 3, 10)
+    # ザ・ワールド
+    if the_world>0:
+        # 背景をフラッシュさせる
+        pyxel.cls(5)  # 半透明のような色で画面を塗りつぶし
+        pyxel.text(50, 60, "THE WORLD!", 8)
 
 pyxel.init(W, H, title="PONG Sample")
 pyxel.run(update, draw)
