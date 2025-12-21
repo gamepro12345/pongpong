@@ -1,5 +1,6 @@
 import pyxel
 import time
+import random
 # 画面サイズ
 W = 160
 H = 120
@@ -9,7 +10,7 @@ pong_time=0
 game_over=False
 level=1
 # ボールのリスト（位置と速度を辞書で管理）
-balls = [{"x": 80, "y": 60, "vx": 1, "vy": 1}]
+balls = [{"x": random.randint(0, W-3), "y": random.randint(0, H-3), "vx": 1, "vy": 1}]
 
 # プレイヤー（パドル）の位置と大きさ
 pad_x = 70
@@ -33,8 +34,8 @@ def update():
     
     # ボールがなくなったら復活
     if len(balls) == 0:
+        time.sleep(1)
         balls.append({"x": 80, "y": 60, "vx": 1, "vy": 1})
-    
     # --- パドルの操作 ---
     if pyxel.btn(pyxel.KEY_LEFT):
         pad_x -= 3
