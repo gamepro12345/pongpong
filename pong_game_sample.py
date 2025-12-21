@@ -10,7 +10,7 @@ pong_time=0
 game_over=False
 level=1
 # ボールのリスト（位置と速度を辞書で管理）
-balls = [{"x": random.randint(0, W-3), "y": random.randint(0, H-3), "vx": 1, "vy": 1}]
+balls = [{"x": random.randint(0, 150), "y": random.randint(0, 110), "vx": 1, "vy": 1}]
 
 # プレイヤー（パドル）の位置と大きさ
 pad_x = 70
@@ -28,7 +28,7 @@ def update():
         time.sleep(1)
     if pong_time>=4:
         level+=1
-        balls.append({"x": 80, "y": 60, "vx": 1, "vy": 1})
+        balls.append({"x": random.randint(0, 150), "y": random.randint(0, 110), "vx": 1, "vy": 1})
         hp+=1
         pong_time=0
     
