@@ -92,11 +92,11 @@ def draw():
         pyxel.text(60, 60, "GAME OVER", 8)
         return
     # パドル
-    pyxel.rect(pad_x, pad_y, pad_w, pad_h, 7)
+    pyxel.rect(pad_x, pad_y, pad_w, pad_h, 10)
 
     # ボール（複数描画）
     for ball in balls:
-        pyxel.rect(ball["x"], ball["y"], 3, 3, 10)
+        pyxel.rect(ball["x"], ball["y"], 3, 3, 3)
     # ザ・ワールド
     if the_world>0:
         # 背景をフラッシュさせる
