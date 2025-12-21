@@ -5,7 +5,7 @@ import random
 W = 160
 H = 120
 #基本変数の定義5
-hp=5
+hp=1
 pong_time=0
 game_over=False
 level=1
@@ -17,7 +17,6 @@ pad_x = 70
 pad_y = 110
 pad_w = 20
 pad_h = 4
-
 
 def update():
     global pad_x, hp, pong_time, game_over, level, balls
@@ -35,17 +34,18 @@ def update():
     # ボールがなくなったら復活
     if len(balls) == 0:
         time.sleep(1)
-        balls.append({"x": 80, "y": 60, "vx": 1, "vy": 1})
+        balls.append({"x": 80, "y": 60, "vx": 2, "vy": 2})
     # --- パドルの操作 ---
     if pyxel.btn(pyxel.KEY_LEFT):
-        pad_x -= 3
+        pad_x -= 5
     if pyxel.btn(pyxel.KEY_RIGHT):
-        pad_x += 3
+        pad_x += 5
 
     # --- ボールの移動と反射 ---
     for ball in balls[:]:
-        ball["x"] += ball["vx"]
-        ball["y"] += ball["vy"]
+        if not pyxel.btn(pyxel.KEY_SPACE):
+            ball["x"] += ball["vx"]
+            ball["y"] += ball["vy"]
 
         # 壁との反射
         if ball["x"] < 0 or ball["x"] > W - 3:
@@ -82,7 +82,8 @@ def draw():
 
     # ボール（複数描画）
     for ball in balls:
-        pyxel.rect(ball["x"], ball["y"], 3, 3, 10)
+        if not pyxel.btn(pyxel.KEY_SPACE):
+            pyxel.rect(ball["x"], ball["y"], 3, 3, 10)
 
 pyxel.init(W, H, title="PONG Sample")
 pyxel.run(update, draw)
