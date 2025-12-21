@@ -11,6 +11,7 @@ pong_time=0
 game_over=False
 level=1
 the_world=0
+world_timer=0
 
 # ボールのリスト（位置と速度を辞書で管理）
 balls = [{"x": random.randint(0, 150), "y": random.randint(0, 10), "vx": 1, "vy": 1}]
@@ -22,7 +23,7 @@ pad_w = 20
 pad_h = 4
 
 def update():
-    global pad_x, hp, pong_time, game_over, level, balls
+    global pad_x, hp, pong_time, game_over, level, balls, the_world, world_timer
     # --- ゲームループの変数管理　---
     if hp<=0:
         pyxel.text(60, 60, "GAME OVER", 8)
@@ -59,10 +60,11 @@ def update():
             ball["vy"] = -ball["vy"]
             pong_time+=1
         if pyxel.btn(pyxel.KEY_SPACE) and the_world==0:
-            the_world=9
+            the_world=270
+            world_timer=the_world//30
         if the_world>0:
             the_world-=1
-            time.sleep(1)
+            world_timer=the_world//30
 
         # パドルとの当たり判定
         if ((pad_x <= ball["x"] and ball["x"] <= pad_x + pad_w) and
@@ -82,6 +84,9 @@ def draw():
     pyxel.text(5, 5, "HP:"+str(hp), 7)
     #レベル
     pyxel.text(5, 15, "LEVEL:"+str(level), 7)
+    #ザ・ワールドの残り時間
+    if world_timer>0:
+        pyxel.text(130, 5, str(world_timer), 8)
     #ゲームがオーバー
     if game_over:
         pyxel.text(60, 60, "GAME OVER", 8)
@@ -95,8 +100,7 @@ def draw():
     # ザ・ワールド
     if the_world>0:
         # 背景をフラッシュさせる
-        pyxel.cls(5)  # 半透明のような色で画面を塗りつぶし
         pyxel.text(50, 60, "THE WORLD!", 8)
 
-pyxel.init(W, H, title="PONG Sample")
+pyxel.init(W, H, title="PONG Sample", fps=30)
 pyxel.run(update, draw)
