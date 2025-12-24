@@ -9,6 +9,7 @@ global the_world
 hp=1
 pong_time=0
 game_over=False
+game_clear=False
 level=1
 the_world=0
 world_timer=0
@@ -23,7 +24,7 @@ pad_w = 20
 pad_h = 4
 
 def update():
-    global pad_x, hp, pong_time, game_over, level, balls, the_world, world_timer
+    global pad_x, hp, pong_time, game_over, game_clear, level, balls, the_world, world_timer
     # --- ゲームループの変数管理　---
     if hp<=0:
         pyxel.text(60, 60, "GAME OVER", 8)
@@ -33,6 +34,9 @@ def update():
     if pong_time>=4:
         if  the_world==0:
             level+=1
+            # レベル200でクリア
+            if level >= 200:
+                game_clear = True
             balls.append({"x": random.randint(0, 150), "y": random.randint(0, 80), "vx": 1, "vy": 1})
             hp+=1
             pong_time=0
@@ -90,6 +94,11 @@ def draw():
     #ザ・ワールドの残り時間
     if world_timer>0:
         pyxel.text(130, 5, str(world_timer), 8)
+    #ゲームがクリア
+    if game_clear:
+        pyxel.text(50, 50, "GAME CLEAR!", 8)
+        pyxel.text(50, 70, "SCORE:"+str(hp), 8)
+        return
     #ゲームがオーバー
     if game_over:
         pyxel.text(60, 60, "GAME OVER", 8)
