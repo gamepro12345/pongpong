@@ -46,9 +46,18 @@ def update():
     if pyxel.btn(pyxel.KEY_RIGHT):
         pad_x += 2
 
+    # ザ・ワールド開始とカウントダウン（ボールループの外で一度だけ処理）
+    if pyxel.btn(pyxel.KEY_SPACE) and the_world == 0:
+        the_world = 270
+        world_timer = the_world // 30
+    if the_world > 0:
+        the_world -= 1
+        world_timer = the_world // 30
+
     # --- ボールの移動と反射 ---
     for ball in balls[:]:
-        if the_world==0:
+        # ボールはザ・ワールドが無効なときだけ移動
+        if the_world == 0:
             ball["x"] += ball["vx"]
             ball["y"] += ball["vy"]
 
@@ -59,12 +68,6 @@ def update():
         if ball["y"] < 0:
             ball["vy"] = -ball["vy"]
             pong_time+=1
-        if pyxel.btn(pyxel.KEY_SPACE) and the_world==0:
-            the_world=270
-            world_timer=the_world//30
-        if the_world>0:
-            the_world-=1
-            world_timer=the_world//30
 
         # パドルとの当たり判定
         if ((pad_x <= ball["x"] and ball["x"] <= pad_x + pad_w) and
